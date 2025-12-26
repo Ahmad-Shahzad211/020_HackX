@@ -1,0 +1,120 @@
+/* FAQ.css */
+.faqsSection {
+  max-width: 900px;
+  width: 100%;
+  /* Make it fluid */
+  min-width: auto;
+  /* Remove fixed min-width */
+  margin: 0 auto;
+  padding: 3rem 1rem;
+  text-align: center;
+  background-color: transparent;
+}
+
+.faqsTitle {
+  font-size: 2.5rem;
+  /* Slightly smaller on mobile */
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+.faqsSubtitle {
+  font-size: 1.25rem;
+  /* Slightly smaller on mobile */
+  color: var(--color-text-muted);
+  margin-bottom: 3rem;
+  transition: color 0.3s ease;
+}
+
+.faqsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faqItem {
+  position: relative;
+  cursor: pointer;
+  /* padding: 0.75rem 1rem; */
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  /* Reduced spacing between items */
+  transition: all 0.3s ease;
+  background-color: var(--color-card-bg);
+  box-shadow: 0 2px 6px var(--color-shadow);
+  z-index: 1;
+  /* Lower z-index than the bubble */
+  border: 1px solid var(--color-border);
+}
+
+.faqItem-container {
+  margin-bottom: 12px;
+}
+
+.faqItem:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.faqItem.active {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.questionRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.question {
+  margin: 0;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.toggleIcon {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.faqAnswer {
+  background-color: var(--color-secondary);
+  border-radius: 0 0 8px 8px;
+  margin-top: -2px;
+  transition: all 0.3s ease;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .faqsList {
+    position: relative;
+  }
+}
+
+/* Add media queries for larger screens */
+@media (min-width: 768px) {
+  .faqsTitle {
+    font-size: 3rem;
+  }
+
+  .faqsSubtitle {
+    font-size: 1.5rem;
+  }
+
+  .question {
+    font-size: 1.2rem;
+  }
+
+  .questionRow {
+    padding: 1.5rem;
+  }
+
+  .toggleIcon {
+    font-size: 1.8rem;
+  }
+}
