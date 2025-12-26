@@ -264,10 +264,10 @@ export const navigationItems = [
     title: "Pricing",
     href: "/#pricing",
   },
-  {
-    title: "Contact",
-    href: "/contact",
-  },
+  // {
+  //   title: "Contact",
+  //   href: "/contact",
+  // },
 ];
 export const tools = [
   {

@@ -28,8 +28,8 @@ export default function Footer() {
           <div className="mb-4 md:mb-0">
             <h3 className="font-semibold text-lg mb-2">Contact us</h3>
             <p className=" mb-1">Need help? Reach us at:</p>
-            <a href="mailto:legischat@gmail.com" className=" hover:underline">
-              legischat@gmail.com
+            <a href="mailto:info@chatlegis.com" className=" hover:underline">
+              info@chatlegis.com
             </a>
           </div>
 
