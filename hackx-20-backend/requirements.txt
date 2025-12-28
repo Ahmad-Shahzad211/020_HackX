@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pydantic-settings
+pyjwt
+python-multipart
+python-socketio
+motor
+bson
+google-genai
+openai
+qdrant-client
+tenacity
+python-dotenv
