@@ -14,6 +14,9 @@ import Stats from "../Stats/stats";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const PRIMARY_COLOR = "#228E98";
+const PRIMARY_COLOR_HOVER = "#1b7078";
+const GRADIENT_PRIMARY_TO = "#2DC0CE";
 
 export default function HomeHero() {
   const heroHeadingRef = useRef<HTMLHeadingElement | null>(null);

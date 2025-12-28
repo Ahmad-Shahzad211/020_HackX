@@ -144,7 +144,7 @@ const LoginPage = () => {
             }}
           >
             {({ isSubmitting, errors, touched }) => (
-              <Form className="space-y-4" suppressHydrationWarning={true}>
+              <Form className="space-y-4">
                 <div>
                   <Field
                     type="email"

@@ -1,3 +1,4 @@
+import { SidebarItemProps } from "@/types";
 import {
   AlertCircle,
   ArrowUpLeftSquareIcon,
@@ -106,6 +107,41 @@ export const featuresData: FeatureData[] = [
         />
       </svg>
     ),
+  },
+];
+// Legal Quotes
+export const quotes = [
+  {
+    text: "The law is reason free from passion.",
+    author: "Aristotle",
+  },
+  {
+    text: "Lawyers are the first virtuous nobility the world has known.",
+    author: "Ralph Waldo Emerson",
+  },
+  {
+    text: "The spirit of encroachment tends to consolidate the powers of all the departments in one, and thus to create, whatever the form of government, a real despotism.",
+    author: "John Marshall",
+  },
+  {
+    text: "The law, in its majestic equality, forbids the rich as well as the poor to sleep under bridges, to beg in the streets, and to steal bread.",
+    author: "Anatole France",
+  },
+  {
+    text: "A lawyer's time and advice are his stock in trade.",
+    author: "Abraham Lincoln",
+  },
+  {
+    text: "The judge is not the only one who decides the case; the lawyers also play a crucial role in shaping the outcome.",
+    author: "William H. Rehnquist",
+  },
+  {
+    text: "The law is the last result of human wisdom acting upon human experience for the benefit of the public.",
+    author: "Samuel Johnson",
+  },
+  {
+    text: "Laws are like cobwebs, which may catch small flies, but let wasps and hornets break through.",
+    author: "Jonathan Swift",
   },
 ];
 
@@ -264,10 +300,10 @@ export const navigationItems = [
     title: "Pricing",
     href: "/#pricing",
   },
-  // {
-  //   title: "Contact",
-  //   href: "/contact",
-  // },
+  {
+    title: "Contact",
+    href: "/contact",
+  },
 ];
 export const tools = [
   {
@@ -327,5 +363,34 @@ export const feedbackTypes = [
     label: "Feature Suggestion",
     icon: Lightbulb,
     color: "from-green-500 to-green-600",
+  },
+];
+
+export const sidebarNavItems: SidebarItemProps[] = [
+  {
+    icon: <ArrowUpLeftSquareIcon size={20} />,
+    label: "To ChatLegis AI",
+    href: "/cl/chatscreen",
+  },
+  {
+    icon: <UserIcon size={20} />,
+    label: "Manage account",
+    href: "/cl/settings/profile",
+  },
+  {
+    icon: <CreditCard size={20} />,
+    label: "Billing & Usage",
+    href: "/cl/settings/billing-and-usage",
+  },
+  {
+    icon: <MessageSquare size={20} />,
+    label: "Feedback",
+    href: "/cl/settings/feedback",
+  },
+
+  {
+    icon: <Shield size={20} />,
+    label: "Security",
+    href: "/cl/settings/security",
   },
 ];

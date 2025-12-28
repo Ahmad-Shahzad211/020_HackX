@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* ------------------------------
+   Design Tokens (v4 replacement
+   for tailwind.config.ts)
+-------------------------------- */
+
 :root {
   /* Light mode colors */
   --background: #ffffff;

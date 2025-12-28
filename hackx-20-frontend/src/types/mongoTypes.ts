@@ -33,3 +33,26 @@ export interface UserType {
     lastActive?: Date;
   }>;
 }
+export interface FeedbackType {
+  userId: Types.ObjectId;
+  type: "feedback" | "issue" | "bug" | "suggestion";
+  details: string;
+  status: "Pending" | "Reviewed" | "Completed";
+  remarks?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export type FeedbackDocument = HydratedDocument<FeedbackType>;
+export interface IssueType {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  subject: "feedback" | "issue" | "bug" | "suggestion";
+  message: string;
+  status: "Pending" | "Reviewed" | "Completed";
+  remarks: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

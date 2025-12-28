@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { FaLock, FaEye, FaEyeSlash, FaCheck, FaTimes } from "react-icons/fa";
+import LegalQuotes from "@/components/LegalQuotes";
 import { newPasswordHandler } from "@/handlers/regloHandler";
 import InfoMessage from "@/components/Message";
 import { useRouter } from "next/navigation";
@@ -90,7 +91,9 @@ const ChangePasswordPage = ({ email }: { email: string }) => {
             className="rounded-t-2xl lg:rounded-l-2xl lg:rounded-tr-none"
             priority
           />
-      
+          <div className="block">
+            <LegalQuotes />
+          </div>
         </div>
 
         {/* Right Half - Form */}
