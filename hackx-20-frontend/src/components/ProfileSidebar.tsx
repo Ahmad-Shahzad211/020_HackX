@@ -11,6 +11,7 @@ import { sidebarNavItems } from "@/data/constant";
 import { SidebarItemProps } from "@/types";
 import Image from "next/image";
 import { getLocation } from "@/utils/clientUtils";
+import ThemeToggle from "@/components/ThemeToggle";
 
 function SidebarItem({ icon, label, href }: SidebarItemProps) {
   const route = useRouter();
@@ -40,18 +41,41 @@ function SidebarItem({ icon, label, href }: SidebarItemProps) {
   return label.toLowerCase() === "logout" ? (
     <button
       onClick={handleLogout}
-      className="flex items-center space-x-4 text-white hover:bg-white/10 px-4 py-3 rounded-lg text-lg transition w-full"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1rem',
+        color: 'var(--color-sidebar-text)',
+        background: 'transparent',
+        fontSize: '1.125rem',
+        fontWeight: 500,
+        borderRadius: '0.5rem',
+        padding: '0.75rem 0',
+        transition: 'background 0.2s, color 0.2s',
+        width: '100%',
+      }}
     >
-      <span className="text-white/100">{icon}</span>
-      <span className="font-medium">{label}</span>
+      <span style={{ color: 'var(--color-sidebar-icon)' }}>{icon}</span>
+      <span style={{ color: 'var(--color-sidebar-text)', fontWeight: 500 }}>{label}</span>
     </button>
   ) : (
     <Link
       href={href}
-      className="flex items-center space-x-4 text-white hover:bg-white/10 px-4 py-3 rounded-lg text-lg transition"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1rem',
+        color: 'var(--color-sidebar-text)',
+        background: 'transparent',
+        fontSize: '1.125rem',
+        fontWeight: 500,
+        borderRadius: '0.5rem',
+        padding: '0.75rem 0',
+        transition: 'background 0.2s, color 0.2s',
+      }}
     >
-      <span className="text-white/100">{icon}</span>
-      <span className="font-medium">{label}</span>
+      <span style={{ color: 'var(--color-sidebar-icon)' }}>{icon}</span>
+      <span style={{ color: 'var(--color-sidebar-text)', fontWeight: 500 }}>{label}</span>
     </Link>
   );
 }
@@ -85,7 +109,8 @@ export default function ProfileSidebar() {
       {/* Hamburger button: only show if drawer is closed and screen is < 1024px */}
       {!isMobileMenuOpen && (
         <button
-          className="lg:hidden fixed top-8 left-4 sm:left-8 z-50 p-2 bg-gradient-primary text-white rounded-md backdrop-blur-sm hover:bg-white/20 transition-colors"
+          className="lg:hidden fixed top-8 left-4 sm:left-8 z-50 p-2 rounded-md backdrop-blur-sm transition-colors"
+          style={{ background: 'var(--color-primary)', color: 'var(--color-text)' }}
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Open sidebar"
         >
@@ -105,7 +130,7 @@ export default function ProfileSidebar() {
       {/* Sidebar */}
       <aside
         className={`
-          fixed inset-y-0 left-0 w-[300px] px-4 py-8 z-40 bg-gradient-primary text-white flex flex-col
+          fixed inset-y-0 left-0 w-[300px] px-4 py-8 z-40 flex flex-col
           transition-transform duration-300 ease-in-out overflow-y-auto
           ${isMobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"}
           
@@ -114,37 +139,39 @@ export default function ProfileSidebar() {
           rounded-[0.7rem] lg:mt-2 lg:ml-[5px] lg:inset-auto
           xl:w-[270px]
         `}
+        style={{ backgroundColor: 'var(--background)', border: '1px solid var(--color-border)' }}
       >
-        {/* Close button for drawer */}
-        <button
-          className="lg:hidden absolute top-5 right-5 p-1 text-white hover:bg-white/20 rounded-full transition-colors"
-          onClick={() => setIsMobileMenuOpen(false)}
-          aria-label="Close sidebar"
-        >
-          <X size={22} />
-        </button>
-
-        <Link
-          href="/cl/chatscreen"
-          className="mb-10 block"
-          onClick={handleLinkClick}
-        >
-          <div className="flex items-center">
-            <div className="w-12 h-12  rounded-lg flex items-center justify-center">
-              <Link href="/">
-                <Image
-                  src="/chatlegis.svg"
-                  alt="Reglo Logo"
-                  width={50}
-                  height={10}
-                />
-              </Link>
+        {/* Header with Close and Theme Toggle */}
+        <div className="flex items-center justify-between mb-6">
+          <Link
+            href="/cl/chatscreen"
+            className="flex items-center flex-1"
+            onClick={handleLinkClick}
+          >
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-card-bg)' }}>
+              <Image
+                src="/chatlegis.svg"
+                alt="Reglo Logo"
+                width={50}
+                height={10}
+              />
             </div>
-            <span className="text-white text-xl font-semibold ml-4">
+            <span className="text-xl font-semibold ml-4" style={{ color: 'var(--color-primary)' }}>
               Chat Legis
             </span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              className="lg:hidden p-2 rounded transition-colors"
+              style={{ background: 'var(--color-input-bg)' }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close sidebar"
+            >
+              <X size={28} style={{ color: 'var(--color-text)' }} />
+            </button>
           </div>
-        </Link>
+        </div>
 
         <nav className="flex-grow space-y-2">
           {sidebarNavItems.map((item) => (
@@ -152,16 +179,19 @@ export default function ProfileSidebar() {
               key={item.label}
               href={item.href}
               onClick={handleLinkClick}
-              className={`flex items-center justify-between rounded-lg hover:bg-white/20 transition-colors
+              className={`flex items-center justify-between rounded-lg transition-colors
                 p-2 text-sm
-                xl:p-3 xl:text-base
-                ${isActive(item.href) ? "bg-white/20" : ""}`}
+                xl:p-3 xl:text-base`}
+              style={{
+                backgroundColor: isActive(item.href) ? 'var(--color-input-bg)' : 'transparent',
+                color: 'var(--color-text)',
+              }}
             >
-              <div className="flex items-center space-x-2 xl:space-x-3">
+              <div className="flex items-center space-x-2 xl:space-x-3" style={{ color: 'var(--color-text)' }}>
                 {item.icon}
                 <span>{item.label}</span>
               </div>
-              <ChevronRight size={20} />
+              <ChevronRight size={20} style={{ color: 'var(--color-text)' }} />
             </Link>
           ))}
         </nav>

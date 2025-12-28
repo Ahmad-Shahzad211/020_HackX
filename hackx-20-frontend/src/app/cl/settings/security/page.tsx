@@ -37,7 +37,7 @@ export default function SecurityPage() {
     setMessage(resp?.message);
   };
   return (
-    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="flex h-screen overflow-hidden transition-colors duration-300" style={{ backgroundColor: 'var(--background)' }}>
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Enhanced Top Bar */}
         <BreadCrumbs page={"Security"} />
@@ -45,11 +45,11 @@ export default function SecurityPage() {
         {/* Scrollable Content Wrapper */}
         <div className="flex-1 overflow-y-auto p-4">
           {/* Enhanced Security Content Box */}
-          <div className="bg-gradient-to-br from-[#A0D2DB]/90 to-[#A0D2DB]/70 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/20">
+          <div className="backdrop-blur-sm p-8 rounded-2xl shadow-xl transition-colors duration-300" style={{ background: 'var(--gradient-2)', borderColor: 'var(--color-border)' }}>
             {/* Header Section */}
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                <h2 className="text-3xl font-bold  mb-2">
                   Active Devices
                 </h2>
                 <p className="text-gray-600 text-sm">

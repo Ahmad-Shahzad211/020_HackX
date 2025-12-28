@@ -18,6 +18,9 @@
   --color-card-bg: #ffffff;
   --color-nav-bg: #ffffff;
   --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-input-bg: #f3f4f6;
+  --color-sidebar-text: #171717;
+  --color-sidebar-icon: #228e98;
 
   /* Gradients */
   --gradient-primary: linear-gradient(to bottom, #228e98 28%, #54bac4 100%);
@@ -43,6 +46,9 @@
   --color-card-bg: #27272a;
   --color-nav-bg: #18181B;
   --color-shadow: rgba(255, 255, 255, 0.1);
+  --color-input-bg: #3f3f46;
+  --color-sidebar-text: #ededed;
+  --color-sidebar-icon: #14b8a6;
   
   /* Dark mode gradients */
   --gradient-primary: #18181B;

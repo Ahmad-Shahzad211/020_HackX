@@ -32,6 +32,42 @@ const ChatbotInput = () => {
     setInputMessage,
   } = useChatbotStore();
 
+  // Render styles globally to avoid hydration issues
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const styleId = 'chatbot-input-styles';
+      if (!document.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = `
+          .scroll-container::-webkit-scrollbar {
+            width: 8px;
+            background: var(--color-scrollbar-track);
+          }
+          .scroll-container::-webkit-scrollbar-thumb {
+            background: var(--color-scrollbar-thumb);
+            border-radius: 8px;
+          }
+          .scroll-container::-webkit-scrollbar-corner {
+            background: var(--color-scrollbar-track);
+          }
+          .scroll-container:focus,
+          .scroll-container:active {
+            outline: none !important;
+            border: none !important;
+            box-shadow: none !important;
+          }
+          .scroll-container::placeholder {
+            color: var(--color-text-muted);
+            opacity: 1;
+            transition: color 0.2s;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  }, []);
+
   const [showTools, setShowTools] = useState(false);
   const toolsRef = useRef<HTMLDivElement>(null);
   const selectedTool = legisStore((state) => state.selectedTool);
@@ -899,30 +935,6 @@ const ChatbotInput = () => {
             rows={1}
             disabled={thinking}
           />
-          <style jsx global>{`
-            .scroll-container::-webkit-scrollbar {
-              width: 8px;
-              background: var(--color-scrollbar-track);
-            }
-            .scroll-container::-webkit-scrollbar-thumb {
-              background: var(--color-scrollbar-thumb);
-              border-radius: 8px;
-            }
-            .scroll-container::-webkit-scrollbar-corner {
-              background: var(--color-scrollbar-track);
-            }
-            .scroll-container:focus,
-            .scroll-container:active {
-              outline: none !important;
-              border: none !important;
-              box-shadow: none !important;
-            }
-            .scroll-container::placeholder {
-              color: var(--color-text-muted);
-              opacity: 1;
-              transition: color 0.2s;
-            }
-          `}</style>
 
           {/* Action bar: Plus | Tools/SelectedTool | Mic | Send */}
           <div className="flex items-center justify-between gap-2 pb-2">

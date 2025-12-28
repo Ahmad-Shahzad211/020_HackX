@@ -94,12 +94,12 @@ const LineChart = () => {
     <div className="relative w-full" ref={containerRef}>
       <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-3 sm:p-6 border border-white/10">
         <div className="mb-4 sm:mb-6">
-          <h3 className="text-lg sm:text-xl font-bold text-black mb-2 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-[#A0D2DB]" />
+          <h3 className="text-lg sm:text-xl font-bold mb-2 flex items-center gap-2 transition-colors duration-300" style={{ color: 'var(--color-text)' }}>
+            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: 'var(--color-primary)' }} />
             <span className="hidden sm:inline">Usage Analytics</span>
             <span className="sm:hidden">Analytics</span>
           </h3>
-          <p className="text-black text-xs sm:text-sm ml-6 sm:ml-7 hidden sm:block">
+          <p className="text-xs sm:text-sm ml-6 sm:ml-7 hidden sm:block transition-colors duration-300" style={{ color: 'var(--color-text-muted)' }}>
             Track your monthly usage across all services
           </p>
         </div>
@@ -185,10 +185,11 @@ const LineChart = () => {
                       x={padding - 15}
                       y={yPos + 5}
                       fontSize={dimensions.width < 640 ? "10" : "12"}
-                      fill="rgba(255,255,255,0.8)"
+                      fill="currentColor"
                       textAnchor="end"
                       fontFamily="system-ui"
                       fontWeight="500"
+                      style={{ color: 'var(--color-text)' }}
                     >
                       {y}
                     </text>
@@ -207,10 +208,11 @@ const LineChart = () => {
                     x={x}
                     y={dimensions.height - padding + 20}
                     fontSize={dimensions.width < 640 ? "9" : "11"}
-                    fill="rgba(255,255,255,0.7)"
+                    fill="currentColor"
                     textAnchor="middle"
                     fontFamily="system-ui"
                     fontWeight="500"
+                    style={{ color: 'var(--color-text-muted)' }}
                   >
                     {dimensions.width < 640 ? m.slice(0, 1) : m}
                   </text>
@@ -298,9 +300,12 @@ const LineChart = () => {
           {/* Enhanced Tooltip with better positioning */}
           {tooltip && (
             <div
-              className="absolute bg-white/95 backdrop-blur-sm text-gray-800 rounded-xl shadow-2xl border border-white/20 transition-all duration-200 ease-out z-50"
+              className="absolute backdrop-blur-sm rounded-xl shadow-2xl transition-all duration-200 ease-out z-50"
               style={{
-                left: Math.min(
+                backgroundColor: 'var(--color-card-bg)',
+                color: 'var(--color-text)',
+                border: '1px solid var(--color-border)',
+                  left: Math.min(
                   Math.max(10, tooltip.x + 15),
                   dimensions.width - 160
                 ),
@@ -311,6 +316,7 @@ const LineChart = () => {
                 minWidth: dimensions.width < 640 ? 120 : 140,
                 transform: "translateY(-50%)",
               }}
+           
             >
               <div
                 className="font-semibold mb-1"
@@ -318,7 +324,7 @@ const LineChart = () => {
               >
                 {tooltip.label}
               </div>
-              <div className="text-gray-600 text-xs mb-1">
+              <div className="text-xs mb-1" style={{ color: 'var(--color-text-muted)' }}>
                 {tooltip.month} 2024
               </div>
               <div
@@ -329,7 +335,7 @@ const LineChart = () => {
               </div>
               <div
                 className="absolute w-2 h-2 rotate-45 -left-1 top-1/2 transform -translate-y-1/2"
-                style={{ backgroundColor: "rgba(255,255,255,0.95)" }}
+                style={{ backgroundColor: 'var(--color-card-bg)' }}
               />
             </div>
           )}
@@ -346,7 +352,7 @@ const LineChart = () => {
                 className="w-3 h-3 sm:w-4 sm:h-4 rounded-full shadow-lg group-hover:scale-110 transition-transform duration-200"
                 style={{ backgroundColor: colors[i] }}
               />
-              <span className="text-white/90 text-xs sm:text-sm font-medium group-hover:text-white transition-colors duration-200">
+              <span className="text-xs sm:text-sm font-medium transition-colors duration-200" style={{ color: 'var(--color-text)' }}>
                 {dimensions.width < 640 ? label.split(" ")[0] : label}
               </span>
             </div>

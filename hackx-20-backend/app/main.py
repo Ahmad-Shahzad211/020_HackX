@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.socket_manager import sio_server
 
-from app.api.v1.endpoints import auth
+from app.api.v1.routes import auth
 from app.core.config import settings
 
 from app.api.v1 import api_router_v1

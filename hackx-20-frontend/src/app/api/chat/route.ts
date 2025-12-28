@@ -18,6 +18,7 @@ async function fetchChatbotData(
   token: string | undefined,
   body?: any
 ) {
+  console.log(`body`, )
   const response = await fetch(url, {
     method: method,
     headers: {

@@ -153,7 +153,7 @@ const Messages = () => {
                     border: msg.role === "user" ? 'none' : '1px solid var(--color-border)',
                   }}
                 >
-                  <p className="text-sm sm:text-base leading-relaxed">
+                  <div className="text-sm sm:text-base leading-relaxed">
                     {msg.role === "user" ? (
                       <CustomMarkdown
                         content={msg.prompt}
@@ -173,7 +173,7 @@ const Messages = () => {
                         isUserMessage={false}
                       />
                     )}
-                  </p>
+                  </div>
                 </div>
 
                 {/* File attachments */}

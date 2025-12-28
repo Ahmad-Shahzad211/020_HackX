@@ -8,7 +8,8 @@ export default function SettingsLayout({
   return (
     <div
       suppressHydrationWarning={true}
-      className="flex h-screen overflow-hidden bg-[#EBF5F5]"
+      className="flex h-screen overflow-hidden"
+      style={{ backgroundColor: 'var(--background)' }}
     >
       <ProfileSidebar />
       <main className="flex-1 flex flex-col overflow-hidden relative">

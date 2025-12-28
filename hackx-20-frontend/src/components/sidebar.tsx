@@ -389,16 +389,16 @@ export default function Sidebar({ setIsSidebarOpen }: SidebarProps) {
 
       {/* Chats List */}
       <div className="flex flex-col overflow-y-auto space-y-1 scrollbar-hide mt-0 mb-2">
-        {loading && listOfChats?.length === 0 ? (
+        {loading && (!Array.isArray(listOfChats) || listOfChats?.length === 0) ? (
           <div className="text-md py-2 px-3" style={{ color: 'var(--color-text-muted)' }}>
             Fetching Chats...
           </div>
-        ) : !loading && listOfChats?.length <= 0 ? (
+        ) : !loading && (!Array.isArray(listOfChats) || listOfChats?.length <= 0) ? (
           <div className="text-md py-2 px-3" style={{ color: 'var(--color-text-muted)' }}>
             Start a new conversation
           </div>
         ) : (
-          listOfChats?.map((chat) => (
+          Array.isArray(listOfChats) && listOfChats?.map((chat) => (
             <div
               onClick={() => handleClick(chat.id)}
               key={chat.id}

@@ -42,7 +42,8 @@ export default function FeedbackPage() {
 
   return (
     <div
-      className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100"
+      className="min-h-screen transition-colors duration-300"
+      style={{ backgroundColor: 'var(--background)' }}
       id="feedback"
     >
       <main className="flex flex-col">
@@ -52,7 +53,7 @@ export default function FeedbackPage() {
 
         {/* Main Content */}
         <div className="flex-1 p-2 sm:p-4 lg:p-6">
-          <div className="bg-linear-to-br from-[#A0D2DB] via-[#7FB8C3] to-[#329898] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden">
+          <div className="rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden transition-colors duration-300" style={{ background: 'var(--gradient-2)' }}>
             <div className="scroll-container p-4 sm:p-6 lg:p-8 max-h-[calc(100vh-120px)] overflow-y-auto">
               {/* Header Section */}
               <div className="text-center mb-8">

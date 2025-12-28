@@ -79,19 +79,18 @@ const CustomMarkdown = ({
               </h3>
             ),
             p: ({ children }) => (
-              <span
+              <div
                 style={{
                   color: 'var(--color-text)',
                   fontSize: '1rem',
                   lineHeight: 1.7,
                   margin: '1rem 0',
-                  display: 'block',
                   wordBreak: 'break-word',
                   width: '100%',
                 }}
               >
                 {children}
-              </span>
+              </div>
             ),
             blockquote: ({ children }) => (
               <blockquote

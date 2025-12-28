@@ -27,11 +27,11 @@ const ChatHistoryModal: React.FC<ChatHistoryModalProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // 🔑 new state
 
   // Filter chats based on search query
-  const filteredChats =
-    listOfChats &&
-    listOfChats.filter((chat) =>
-      chat.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  const filteredChats = Array.isArray(listOfChats)
+    ? listOfChats.filter((chat) =>
+        chat.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
   const handlePreviewChat = async (chat: { id: string; title: string }) => {
     setSelectedChat(chat);

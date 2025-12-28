@@ -1,0 +1,10 @@
+[
+    {
+        "role": "user",
+        "prompt": "hwllo"
+    },
+    {
+        "role": "ai",
+        "prompt": "Hello! How can I assist you with the laws of Pakistan today?"
+    }
+]

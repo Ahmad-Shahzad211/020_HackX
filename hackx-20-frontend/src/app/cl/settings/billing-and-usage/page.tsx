@@ -14,14 +14,14 @@ const userData = {
 export default function BillingAndUsagePage() {
   const userInfo = useUserStore((state) => state.userInfo);
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen transition-colors duration-300" style={{ backgroundColor: 'var(--background)' }}>
       <main className="flex flex-col">
         {/* Enhanced Top Bar */}
         <BreadCrumbs page={"Billing and Usage"} />
 
         {/* Main Content */}
         <div className="flex-1 p-2 sm:p-4 lg:p-6">
-          <div className="bg-gradient-to-br from-[#A0D2DB] via-[#7FB8C3] to-[#329898] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden">
+          <div className="rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden transition-colors duration-300" style={{ background: 'var(--gradient-2)' }}>
             <div className="p-4 sm:p-6 lg:p-8 max-h-[calc(100vh-120px)] overflow-y-auto scroll-container">
               {/* Upgrade Card for small and medium screens */}
               {userInfo.plan != "premium" && (

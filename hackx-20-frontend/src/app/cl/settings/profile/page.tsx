@@ -152,13 +152,13 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
+    <div className="flex h-screen overflow-hidden transition-colors duration-300" style={{ backgroundColor: 'var(--background)' }}>
       <main className="flex-1 flex flex-col overflow-hidden">
         <BreadCrumbs page={"Manage Account"} />
 
         <div className="flex-1 overflow-y-auto p-4 md:p-6">
-          <div className="bg-gradient-2 p-6 md:p-8 rounded-lg shadow-lg">
-            <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
+          <div className="p-6 md:p-8 rounded-lg shadow-lg transition-colors duration-300" style={{ background: 'var(--gradient-2)' }}>
+            <h2 className="text-xl md:text-2xl font-semibold mb-6" style={{ color: 'var(--color-text)' }}>
               User Profile
             </h2>
 
@@ -212,7 +212,7 @@ export default function ProfilePage() {
               <div>
                 {!isEditingName ? (
                   <div className="flex items-center space-x-2 group">
-                    <h3 className="text-lg md:text-xl font-semibold text-gray-800">
+                    <h3 className="text-lg md:text-xl font-semibold ">
                       {loading ? (
                         <div
                           className="h-5 w-32 rounded animate-pulse 
@@ -299,7 +299,7 @@ export default function ProfilePage() {
             >
               {({ isSubmitting, errors, touched }) => (
                 <Form className="space-y-4 mb-1">
-                  <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                  <h2 className="text-lg font-semibold  mb-4">
                     Reset Password
                   </h2>
 
@@ -308,7 +308,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="currentPassword"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-gray-200 mb-1"
                       >
                         Current Password
                       </label>
@@ -317,7 +317,7 @@ export default function ProfilePage() {
                           type={showCurrentPassword ? "text" : "password"}
                           id="currentPassword"
                           name="currentPassword"
-                          className="w-full p-3 border border-gray-400 rounded-md shadow-sm focus:ring-[#329898] focus:border-[#329898] text-gray-900 pr-10"
+                          className="w-full p-3 border border-gray-400 rounded-md shadow-sm focus:ring-[#329898] focus:border-[#329898]  pr-10"
                           placeholder="Enter current password"
                         />
                         <button
@@ -345,7 +345,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="newPassword"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-gray-300 mb-1"
                       >
                         New Password
                       </label>
@@ -354,7 +354,7 @@ export default function ProfilePage() {
                           type={showNewPassword ? "text" : "password"}
                           id="newPassword"
                           name="newPassword"
-                          className="w-full p-3 border border-gray-400 rounded-md shadow-sm focus:ring-[#329898] focus:border-[#329898] text-gray-900 pr-10"
+                          className="w-full p-3 border border-gray-400 rounded-md shadow-sm focus:ring-[#329898] focus:border-[#329898]  pr-10"
                           placeholder="Enter new password"
                         />
                         <button
@@ -403,7 +403,7 @@ export default function ProfilePage() {
 
             {/* Connected Accounts */}
             <div className="mb-6">
-              <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-3">
+              <h3 className="text-base md:text-lg font-semibold  mb-3">
                 Connected With
               </h3>
               <div className="flex items-center justify-between p-3.5 border border-gray-300 rounded-md mb-3 bg-white/40">

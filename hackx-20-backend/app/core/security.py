@@ -15,6 +15,7 @@ def get_current_user_id(token: str = Depends(oauth2_scheme)) -> str:
     """
     print(f"Token recieved: {token}")
     if not settings.JWT_SECRET_KEY:
+        print("CRITICAL ERROR: JWT_SECRET_KEY is not configured in settings. Check your .env file.")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="JWT_SECRET_KEY is not configured on the server."

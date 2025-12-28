@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     QDRANT_URL: Optional[str] = None
     QDRANT_API_KEY: Optional[str] = None
     
+    MONGO_URI: str
     HISTORY_DIR: str = "chat_histories"
 
     JWT_SECRET_KEY: Optional[str] = None
