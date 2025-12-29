@@ -152,7 +152,6 @@ class EmbeddingService:
         print("Initialized OpenAI EmbeddingService.")
 
     async def embed_query(self, query: str) -> List[float]:
-        print(f"Generating OpenAI embedding for query: '{query[:70]}...'")
         try:
             response = await self.client.embeddings.create(
                 input=[query],

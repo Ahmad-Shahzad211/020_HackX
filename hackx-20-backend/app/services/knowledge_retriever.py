@@ -1,4 +1,4 @@
-from qdrant_client import QdrantClient, models
+from qdrant_client import AsyncQdrantClient, models
 from ..core.config import settings
 from typing import List
 import json
@@ -9,7 +9,7 @@ class ScopedKnowledgeRetriever:
     and will only search for documents within that scope.
     """
     def __init__(self, embedding_service, collection_name: str):
-        self.client = QdrantClient(url=settings.QDRANT_URL, api_key=settings.QDRANT_API_KEY or None)
+        self.client = AsyncQdrantClient(url=settings.QDRANT_URL, api_key=settings.QDRANT_API_KEY or None)
         self.embedding_service = embedding_service
         self.collection_name = collection_name
         print(f"Initialized ScopedKnowledgeRetriever for Qdrant collection: '{self.collection_name}'")
@@ -26,7 +26,7 @@ class ScopedKnowledgeRetriever:
                 print("  - Embedding generation failed. Returning empty.")
                 return []
             
-            search_result = self.client.search(
+            search_result = await self.client.search(
                 collection_name=self.collection_name,
                 query_vector=query_embedding,
                 limit=top_k,
