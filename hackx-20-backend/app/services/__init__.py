@@ -2,6 +2,7 @@ from .ai_services import AgenticGeminiService, EmbeddingService, GroundingGemini
 from .knowledge_retriever import ScopedKnowledgeRetriever
 from .tools import ToolBox
 from .rag_orchestrator import RAGOrchestrator
+from .qdrant_admin_service import QdrantAdminService
 # doc_review_instance is no longer needed
 from .file_service import file_service_instance
 
@@ -46,3 +47,6 @@ tool_box_instance = ToolBox(
 # --- 4. Create the Final Agent and Orchestrator ---
 agentic_gemini_instance = AgenticGeminiService(tool_box=tool_box_instance)
 rag_orchestrator_instance = RAGOrchestrator(gemini_service=agentic_gemini_instance)
+
+# --- 5. Create Admin Service for collection management and ingestion ---
+qdrant_admin_service_instance = QdrantAdminService(embedding_service=embedding_service_instance)
