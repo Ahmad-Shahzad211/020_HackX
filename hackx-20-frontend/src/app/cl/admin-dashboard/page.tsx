@@ -7,6 +7,7 @@ import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
 import { motion, AnimatePresence } from "framer-motion";
 import { sidebarVariants } from "@/data/constant";
+import toast, { Toaster } from "react-hot-toast";
 import { 
   Users, 
   FileText, 
@@ -48,7 +49,6 @@ export default function AdminDashboard() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [message, setMessage] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   
   // Document states
@@ -57,8 +57,22 @@ export default function AdminDashboard() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [docTitle, setDocTitle] = useState("");
-  const [docCategory, setDocCategory] = useState("General");
+  const [docCategory, setDocCategory] = useState("judgment");
   const [uploadingDoc, setUploadingDoc] = useState(false);
+  const [selectedToolFilter, setSelectedToolFilter] = useState<string>("all");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
+
+  // Tool categories from constant
+  const toolCategories = [
+    { title: "All Documents", href: "all", icon: "📚" },
+    { title: "Judgment Search", href: "judgment", icon: "⚖️" },
+    { title: "Statutes", href: "statutes", icon: "📜" },
+    { title: "Suites", href: "suites", icon: "✍️" },
+    { title: "Contract View", href: "contract", icon: "📄" },
+    { title: "Drafts", href: "drafts", icon: "✍️" },
+    { title: "Synopsis", href: "synopsis", icon: "📄" },
+  ];
 
   useEffect(() => {
     // Check if user is admin
@@ -86,10 +100,10 @@ export default function AdminDashboard() {
         setUsers(data.users);
         setTotalUsers(data.totalUsers);
       } else {
-        setMessage(data.message);
+        toast.error(data.message);
       }
     } catch (error: any) {
-      setMessage("Failed to fetch users");
+      toast.error("Failed to fetch users");
     } finally {
       setLoading(false);
     }
@@ -114,13 +128,13 @@ export default function AdminDashboard() {
       const data = await response.json();
 
       if (data.status === 200) {
-        setMessage("User deleted successfully");
+        toast.success("User deleted successfully");
         fetchUsers();
       } else {
-        setMessage(data.message);
+        toast.error(data.message);
       }
     } catch (error: any) {
-      setMessage("Failed to delete user");
+      toast.error("Failed to delete user");
     }
   };
 
@@ -145,13 +159,13 @@ export default function AdminDashboard() {
       const data = await response.json();
 
       if (data.status === 200) {
-        setMessage(`User role updated to ${newRole} successfully`);
+        toast.success(`User role updated to ${newRole} successfully`);
         fetchUsers();
       } else {
-        setMessage(data.message);
+        toast.error(data.message);
       }
     } catch (error: any) {
-      setMessage("Failed to update user role");
+      toast.error("Failed to update user role");
     }
   };
 
@@ -186,10 +200,10 @@ export default function AdminDashboard() {
       if (data.status === 200) {
         setDocuments(data.documents);
       } else {
-        setMessage(data.message);
+        toast.error(data.message);
       }
     } catch (error: any) {
-      setMessage("Failed to fetch documents");
+      toast.error("Failed to fetch documents");
     } finally {
       setDocLoading(false);
     }
@@ -199,7 +213,7 @@ export default function AdminDashboard() {
     e.preventDefault();
 
     if (!uploadFile || !docTitle || !docCategory) {
-      setMessage("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
 
@@ -222,26 +236,29 @@ export default function AdminDashboard() {
       const data = await response.json();
 
       if (data.status === 200) {
-        setMessage("Document uploaded successfully");
+        toast.success("Document uploaded successfully");
         setShowUploadModal(false);
         setUploadFile(null);
         setDocTitle("");
-        setDocCategory("General");
+        setDocCategory("judgment");
         fetchDocuments();
       } else {
-        setMessage(data.message);
+        toast.error(data.message);
       }
     } catch (error: any) {
-      setMessage("Failed to upload document");
+      toast.error("Failed to upload document");
     } finally {
       setUploadingDoc(false);
     }
   };
 
   const handleDeleteDocument = async (documentId: string) => {
-    if (!confirm("Are you sure you want to delete this document?")) {
-      return;
-    }
+    setDocumentToDelete(documentId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteDocument = async () => {
+    if (!documentToDelete) return;
 
     try {
       const token = localStorage.getItem("token");
@@ -251,19 +268,21 @@ export default function AdminDashboard() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ documentId }),
+        body: JSON.stringify({ documentId: documentToDelete }),
       });
 
       const data = await response.json();
 
       if (data.status === 200) {
-        setMessage("Document deleted successfully");
+        toast.success("Document deleted successfully");
         fetchDocuments();
+        setShowDeleteModal(false);
+        setDocumentToDelete(null);
       } else {
-        setMessage(data.message);
+        toast.error(data.message);
       }
     } catch (error: any) {
-      setMessage("Failed to delete document");
+      toast.error("Failed to delete document");
     }
   };
 
@@ -308,6 +327,7 @@ export default function AdminDashboard() {
       id="admin-dashboard"
       style={{ backgroundColor: 'var(--background)' }}
     >
+      <Toaster position="top-right" />
       {/* Mobile backdrop overlay */}
       <AnimatePresence>
         {isSidebarOpen && (
@@ -357,16 +377,6 @@ export default function AdminDashboard() {
                 Manage users and system settings
               </p>
             </div>
-
-            {/* Message */}
-            {message && (
-              <div
-                className="mb-6 p-4 rounded-lg"
-                style={{ backgroundColor: 'var(--background)', border: '1px solid var(--color-border)' }}
-              >
-                <p style={{ color: 'var(--color-text)' }}>{message}</p>
-              </div>
-            )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -576,28 +586,74 @@ export default function AdminDashboard() {
             </button>
           </div>
 
+          {/* Tool Filter Tabs */}
+          <div className="mb-6 overflow-x-auto">
+            <div className="flex gap-2 min-w-max pb-2">
+              {toolCategories.map((tool) => (
+                <button
+                  key={tool.href}
+                  onClick={() => setSelectedToolFilter(tool.href)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90 whitespace-nowrap"
+                  style={{
+                    backgroundColor: selectedToolFilter === tool.href
+                      ? 'var(--color-primary)'
+                      : 'var(--color-input-bg)',
+                    color: selectedToolFilter === tool.href
+                      ? 'white'
+                      : 'var(--color-text)',
+                  }}
+                >
+                  <span>{tool.icon}</span>
+                  <span>{tool.title}</span>
+                  {selectedToolFilter === tool.href && (
+                    <span
+                      className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        color: 'white',
+                      }}
+                    >
+                      {selectedToolFilter === "all"
+                        ? documents.length
+                        : documents.filter((doc) => doc.category === tool.href).length}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {docLoading ? (
             <p style={{ color: 'var(--color-text-muted)' }}>Loading documents...</p>
           ) : (
             <div className="overflow-x-auto">
-              {documents.length === 0 ? (
-                <div className="text-center py-8">
-                  <FileText size={48} style={{ color: 'var(--color-text-muted)', margin: '0 auto 16px' }} />
-                  <p style={{ color: 'var(--color-text-muted)' }}>No documents found. Upload one to get started!</p>
-                </div>
-              ) : (
-                <table className="w-full">
-                  <thead>
-                    <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                      <th className="text-left py-3 px-4" style={{ color: 'var(--color-text)' }}>Title</th>
-                      <th className="text-left py-3 px-4" style={{ color: 'var(--color-text)' }}>Category</th>
-                      <th className="text-left py-3 px-4" style={{ color: 'var(--color-text)' }}>Status</th>
-                      <th className="text-left py-3 px-4" style={{ color: 'var(--color-text)' }}>Uploaded At</th>
-                      <th className="text-left py-3 px-4" style={{ color: 'var(--color-text)' }}>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {documents.map((doc) => (
+              {(() => {
+                const filteredDocuments = selectedToolFilter === "all"
+                  ? documents
+                  : documents.filter((doc) => doc.category === selectedToolFilter);
+                
+                return filteredDocuments.length === 0 ? (
+                  <div className="text-center py-8">
+                    <FileText size={48} style={{ color: 'var(--color-text-muted)', margin: '0 auto 16px' }} />
+                    <p style={{ color: 'var(--color-text-muted)' }}>
+                      {selectedToolFilter === "all"
+                        ? "No documents found. Upload one to get started!"
+                        : `No documents found for ${toolCategories.find(t => t.href === selectedToolFilter)?.title}. Upload one to get started!`}
+                    </p>
+                  </div>
+                ) : (
+                  <table className="w-full">
+                    <thead>
+                      <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
+                        <th className="text-left py-3 px-4" style={{ color: 'var(--color-text)' }}>Title</th>
+                        <th className="text-left py-3 px-4" style={{ color: 'var(--color-text)' }}>Category</th>
+                        <th className="text-left py-3 px-4" style={{ color: 'var(--color-text)' }}>Status</th>
+                        <th className="text-left py-3 px-4" style={{ color: 'var(--color-text)' }}>Uploaded At</th>
+                        <th className="text-left py-3 px-4" style={{ color: 'var(--color-text)' }}>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredDocuments.map((doc) => (
                       <tr key={doc.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                         <td className="py-3 px-4" style={{ color: 'var(--color-text)' }}>
                           <div className="flex items-center gap-2">
@@ -606,7 +662,10 @@ export default function AdminDashboard() {
                           </div>
                         </td>
                         <td className="py-3 px-4" style={{ color: 'var(--color-text)' }}>
-                          {doc.category}
+                          <span className="flex items-center gap-2">
+                            <span>{toolCategories.find(t => t.href === doc.category)?.icon}</span>
+                            <span>{toolCategories.find(t => t.href === doc.category)?.title || doc.category}</span>
+                          </span>
                         </td>
                         <td className="py-3 px-4">
                           <span
@@ -627,7 +686,7 @@ export default function AdminDashboard() {
                             <button
                               onClick={() => {
                                 // TODO: Implement edit functionality
-                                alert('Edit functionality will be implemented soon');
+                                toast('Edit functionality will be implemented soon', { icon: '✏️' });
                               }}
                               className="p-2 rounded hover:opacity-80 transition"
                               style={{
@@ -653,9 +712,10 @@ export default function AdminDashboard() {
                         </td>
                       </tr>
                     ))}
-                  </tbody>
-                </table>
-              )}
+                    </tbody>
+                  </table>
+                );
+              })()}
             </div>
           )}
         </div>
@@ -676,7 +736,7 @@ export default function AdminDashboard() {
                     setShowUploadModal(false);
                     setUploadFile(null);
                     setDocTitle("");
-                    setDocCategory("General");
+                    setDocCategory("judgment");
                   }}
                   className="p-1 rounded hover:opacity-80"
                   style={{ backgroundColor: 'rgba(107, 114, 128, 0.2)' }}
@@ -707,7 +767,7 @@ export default function AdminDashboard() {
 
                 <div>
                   <label style={{ color: 'var(--color-text)' }} className="block text-sm font-medium mb-2">
-                    Category
+                    Category (Tool Type)
                   </label>
                   <select
                     value={docCategory}
@@ -719,12 +779,12 @@ export default function AdminDashboard() {
                       color: 'var(--color-text)',
                     }}
                   >
-                    <option value="General">General</option>
-                    <option value="Constitutional">Constitutional</option>
-                    <option value="Criminal">Criminal</option>
-                    <option value="Civil">Civil</option>
-                    <option value="Corporate">Corporate</option>
-                    <option value="Labor">Labor</option>
+                    <option value="judgment">⚖️ Judgment Search</option>
+                    <option value="statutes">📜 Statutes</option>
+                    <option value="suites">✍️ Suites</option>
+                    <option value="contract">📄 Contract View</option>
+                    <option value="drafts">✍️ Drafts</option>
+                    <option value="synopsis">📄 Synopsis</option>
                   </select>
                 </div>
 
@@ -773,7 +833,7 @@ export default function AdminDashboard() {
                       setShowUploadModal(false);
                       setUploadFile(null);
                       setDocTitle("");
-                      setDocCategory("General");
+                      setDocCategory("judgment");
                     }}
                     className="flex-1 py-2 rounded-lg font-medium transition-all"
                     style={{
@@ -786,6 +846,62 @@ export default function AdminDashboard() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div
+              className="rounded-lg p-6 max-w-md w-full"
+              style={{ backgroundColor: 'var(--background)', border: '1px solid var(--color-border)' }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
+                  Delete Document
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setDocumentToDelete(null);
+                  }}
+                  className="p-1 rounded hover:opacity-80"
+                  style={{ backgroundColor: 'rgba(107, 114, 128, 0.2)' }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="mb-6">
+                <p style={{ color: 'var(--color-text)' }} className="text-base">
+                  Are you sure you want to delete this document? This action cannot be undone.
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={confirmDeleteDocument}
+                  className="flex-1 py-2 rounded-lg font-medium transition-all hover:opacity-90"
+                  style={{ backgroundColor: '#ef4444', color: 'white' }}
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setDocumentToDelete(null);
+                  }}
+                  className="flex-1 py-2 rounded-lg font-medium transition-all"
+                  style={{
+                    backgroundColor: 'var(--color-input-bg)',
+                    color: 'var(--color-text)',
+                    border: '1px solid var(--color-border)',
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         )}

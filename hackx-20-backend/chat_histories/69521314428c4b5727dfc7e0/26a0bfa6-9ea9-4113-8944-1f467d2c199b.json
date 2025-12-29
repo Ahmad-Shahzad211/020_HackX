@@ -1,0 +1,10 @@
+[
+    {
+        "role": "user",
+        "prompt": "hi"
+    },
+    {
+        "role": "ai",
+        "prompt": "Hello! How can I assist you with the laws of Pakistan today? Please note: This information is for educational purposes only and does not constitute legal advice. You should consult with a qualified legal professional for advice on your specific situation."
+    }
+]
