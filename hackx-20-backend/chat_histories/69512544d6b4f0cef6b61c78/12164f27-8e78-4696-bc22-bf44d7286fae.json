@@ -1,0 +1,10 @@
+[
+    {
+        "role": "user",
+        "prompt": "hi"
+    },
+    {
+        "role": "ai",
+        "prompt": "Hello! I am ChatLegis, your AI legal assistant for Pakistan. How can I assist you with Pakistani law today?"
+    }
+]

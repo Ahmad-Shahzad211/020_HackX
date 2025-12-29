@@ -40,6 +40,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if admin login is requested
+    if (data.isAdminLogin && user.role !== "admin") {
+      return NextResponse.json(
+        { message: "Unauthorized: Admin access required", status: 403 },
+        { status: 403 }
+      );
+    }
+
     // Ensure userDeviceAndLocationInfo exists and is an array
     if (!Array.isArray(user.userDeviceAndLocationInfo)) {
       user.userDeviceAndLocationInfo = [];
@@ -100,6 +108,7 @@ export async function POST(request: NextRequest) {
         id: user._id,
         email: user.email,
         username: user.fullName,
+        role: user.role,
       },
       process.env.JWT_SECRET as string,
       {
@@ -111,6 +120,7 @@ export async function POST(request: NextRequest) {
       {
         message: "Success! Logged In. Redirecting you in a moment...",
         fullName: user.fullName,
+        role: user.role,
         jwtToken: token,
         status: 200,
       },

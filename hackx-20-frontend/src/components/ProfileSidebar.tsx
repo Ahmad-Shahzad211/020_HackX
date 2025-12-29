@@ -7,11 +7,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { UAParser } from "ua-parser-js";
 import { logoutHandler } from "@/handlers/regloHandler";
-import { sidebarNavItems } from "@/data/constant";
+import { sidebarNavItems, adminSidebarNavItem } from "@/data/constant";
 import { SidebarItemProps } from "@/types";
 import Image from "next/image";
 import { getLocation } from "@/utils/clientUtils";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useUserStore } from "@/app/cl/store/userInfoStore";
 
 function SidebarItem({ icon, label, href }: SidebarItemProps) {
   const route = useRouter();
@@ -83,6 +84,12 @@ function SidebarItem({ icon, label, href }: SidebarItemProps) {
 export default function ProfileSidebar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const userRole = useUserStore((state) => state.userRole);
+
+  // Debug: Log the user role
+  useEffect(() => {
+    console.log("Current user role:", userRole);
+  }, [userRole]);
 
   const isActive = (href: string) => {
     if (href === "/cl/settings/profile") {
@@ -174,6 +181,26 @@ export default function ProfileSidebar() {
         </div>
 
         <nav className="flex-grow space-y-2">
+          {userRole === "admin" && (
+            <Link
+              key={adminSidebarNavItem.label}
+              href={adminSidebarNavItem.href}
+              onClick={handleLinkClick}
+              className={`flex items-center justify-between rounded-lg transition-colors
+                p-2 text-sm
+                xl:p-3 xl:text-base`}
+              style={{
+                backgroundColor: isActive(adminSidebarNavItem.href) ? 'var(--color-input-bg)' : 'transparent',
+                color: 'var(--color-text)',
+              }}
+            >
+              <div className="flex items-center space-x-2 xl:space-x-3" style={{ color: 'var(--color-text)' }}>
+                {adminSidebarNavItem.icon}
+                <span>{adminSidebarNavItem.label}</span>
+              </div>
+              <ChevronRight size={20} style={{ color: 'var(--color-text)' }} />
+            </Link>
+          )}
           {sidebarNavItems.map((item) => (
             <Link
               key={item.label}

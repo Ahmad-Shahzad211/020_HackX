@@ -13,6 +13,10 @@ export const loginHandler = async (values: any) => {
     Cookies.set("__chatLegis__", data.jwtToken, {
       expires: 7,
     });
+    // Store token in localStorage for admin API calls
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("token", data.jwtToken);
+    }
     return { data, status: res.status };
   } catch (error: any) {
     // ----------------------
@@ -57,9 +61,17 @@ export const logoutHandler = async (values: any) => {
 
     const response = await axios.post("/api/auth/logout", values, { headers });
     Cookies.remove("__chatLegis__");
+    // Clear localStorage token
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("token");
+    }
     return { data: response.data, status: response.status };
   } catch (error: any) {
     Cookies.remove("__chatLegis__");
+    // Clear localStorage token on error too
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("token");
+    }
     return {
       message: error.response.data.message,
       status: error.status,

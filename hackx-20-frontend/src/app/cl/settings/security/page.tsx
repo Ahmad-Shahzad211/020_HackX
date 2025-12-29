@@ -22,7 +22,7 @@ export default function SecurityPage() {
   const [loading, setLoading] = useState(false);
   const [currentDeviceIP, setCurrentDeviceIP] = useState("");
   const [message, setMessage] = useState("");
-  const { devices } = useUserStore();
+  const { devices, setDevices } = useUserStore();
   useEffect(() => {
     const fetchIP = async () => {
       const currentIP = await getLocation();
@@ -34,7 +34,16 @@ export default function SecurityPage() {
     setLoading(true);
     const resp = await removeDeviceHandler(ipAddress);
     setLoading(false);
-    setMessage(resp?.message);
+    setMessage(resp?.message || "");
+    
+    // Remove device from local state if successful
+    if (resp?.status === 200) {
+      const updatedDevices = devices.filter((device: any) => device.ipAddress !== ipAddress);
+      setDevices(updatedDevices);
+      
+      // Clear message after 3 seconds
+      setTimeout(() => setMessage(""), 3000);
+    }
   };
   return (
     <div className="flex h-screen overflow-hidden transition-colors duration-300" style={{ backgroundColor: 'var(--background)' }}>
@@ -94,13 +103,13 @@ export default function SecurityPage() {
               </div>
             </div>
             {/* Display Message */}
-            {message.length > 0 && (
+            {message && message.length > 0 && (
               <div
                 className={`${
                   message.includes("Success!") ? "bg-green-500" : "bg-red-500"
                 } text-white rounded-xl p-4 mb-2`}
               >
-                <p>{message}</p>
+                <span className="text-sm">{message}</span>
               </div>
             )}
             {/* Enhanced Device List */}

@@ -63,10 +63,12 @@ export type UserInfoType = {
   userAvatar: string;
   userInfo: any;
   devices: any;
+  userRole?: string;
   setUserName: (userName: string) => void;
   setUserAvatar: (userAvatar: string) => void;
   setDevices: (devices: any) => void;
   setUserInfo: (userInfo: any) => void;
+  setUserRole?: (role: string) => void;
 };
 
 export interface SidebarItemProps {

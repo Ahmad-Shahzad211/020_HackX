@@ -263,7 +263,7 @@ const ChatbotInput = () => {
           prompt: "",
           role: "ai",
           type: "thinking",
-          ai_response: "Searching...",
+          ai_response: "Thinking...",
         },
       ]);
       const form = new FormData();

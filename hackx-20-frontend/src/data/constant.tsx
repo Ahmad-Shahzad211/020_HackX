@@ -394,3 +394,9 @@ export const sidebarNavItems: SidebarItemProps[] = [
     href: "/cl/settings/security",
   },
 ];
+
+export const adminSidebarNavItem: SidebarItemProps = {
+  icon: <BarChart3 size={20} />,
+  label: "Dashboard",
+  href: "/cl/settings/admin-dashboard",
+};

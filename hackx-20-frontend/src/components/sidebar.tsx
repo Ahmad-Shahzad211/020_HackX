@@ -15,6 +15,8 @@ import {
   Edit2,
   Check,
   Loader2,
+  Shield,
+  MessageSquare,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -43,6 +45,7 @@ interface SidebarItemProps {
 
 interface SidebarProps {
   setIsSidebarOpen: (isOpen: boolean) => void;
+  hideChats?: boolean;
 }
 
 /* ======================= SidebarItem ======================= */
@@ -146,7 +149,7 @@ function SidebarItem({ icon, label, href }: SidebarItemProps) {
 }
 
 /* ======================= Sidebar ======================= */
-export default function Sidebar({ setIsSidebarOpen }: SidebarProps) {
+export default function Sidebar({ setIsSidebarOpen, hideChats = false }: SidebarProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingChatId, setLoadingChatId] = useState<string | null>(null);
@@ -159,6 +162,7 @@ export default function Sidebar({ setIsSidebarOpen }: SidebarProps) {
   const { setMessages, setSessionID, sessionID } = useChatbotStore();
   const userName = useUserStore((state) => state.userName);
   const avatarUrl = useUserStore((state) => state.userAvatar);
+  const userRole = useUserStore((state) => state.userRole);
   const setUserName = useUserStore((state) => state.setUserName);
   const setAvatarUrl = useUserStore((state) => state.setUserAvatar);
   const listOfChats = legisStore((state) => state.listOfChats);
@@ -167,13 +171,25 @@ export default function Sidebar({ setIsSidebarOpen }: SidebarProps) {
 
   /* ----------------- Load chats ----------------- */
   useEffect(() => {
+    if (hideChats) return;
+    
     const loadChats = async () => {
       setLoading(true);
       await fetchChats();
       setLoading(false);
     };
+    
+    // Initial load
     loadChats();
-  }, []);
+    
+    // Set up interval to refresh every 7 seconds
+    const intervalId = setInterval(() => {
+      fetchChats(); // Auto-refresh without loading spinner
+    }, 7000);
+    
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
+  }, [hideChats]);
   /* ----------------- Get user details ----------------- */
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -354,109 +370,142 @@ export default function Sidebar({ setIsSidebarOpen }: SidebarProps) {
         </div>
       </div>
 
-      {/* New Chat */}
-      <div className="flex justify-end">
-        <button
-          onClick={handleNewChat}
-          disabled={loadingChatId === "new"}
-          className="flex items-center space-x-3 w-full px-4 py-2 rounded-lg text-lg font-medium transition disabled:opacity-50"
-          style={{
-            background: 'var(--color-input-bg)',
-            color: 'var(--color-primary)',
-          }}
-        >
-          {loadingChatId === "new" ? (
-            <div className="w-4 h-4 border-2 border-[var(--color-border)] border-t-[var(--color-primary)] rounded-full animate-spin" />
-          ) : (
-            <MessageCirclePlus size={15} />
-          )}
-          <span className="text-sm">
-            {loadingChatId === "new" ? "Creating..." : "New Chat"}
-          </span>
-        </button>
-      </div>
+      {/* Navigation buttons at top */}
+      {userRole === "admin" && (
+        <div className="flex flex-col gap-2 mb-4">
+          <Link
+            href="/cl/admin-dashboard"
+            className="flex items-center space-x-3 w-full px-4 py-3 rounded-lg text-lg font-medium transition hover:opacity-80"
+            style={{
+              background: hideChats ? 'var(--color-primary)' : 'var(--color-input-bg)',
+              color: hideChats ? 'white' : 'var(--color-primary)',
+            }}
+          >
+            <Shield size={18} />
+            <span className="text-sm">Admin Dashboard</span>
+          </Link>
+          <Link
+            href="/cl/chatscreen"
+            className="flex items-center space-x-3 w-full px-4 py-3 rounded-lg text-lg font-medium transition hover:opacity-80"
+            style={{
+              background: hideChats ? 'var(--color-input-bg)' : 'var(--color-primary)',
+              color: hideChats ? 'var(--color-primary)' : 'white',
+            }}
+          >
+            <MessageSquare size={18} />
+            <span className="text-sm">Chat Screen</span>
+          </Link>
+          
+        </div>
+      )}
 
-      {/* Search Button */}
-      <div className="my-4 relative">
-        <SearchButton onClick={() => setIsSearchModalOpen(true)} />
-      </div>
-
-      {/* Search Modal */}
-      <ChatHistoryModal
-        isOpen={isSearchModalOpen}
-        onClose={() => setIsSearchModalOpen(false)}
-      />
-
-      {/* Chats List */}
-      <div className="flex flex-col overflow-y-auto space-y-1 scrollbar-hide mt-0 mb-2">
-        {loading && (!Array.isArray(listOfChats) || listOfChats?.length === 0) ? (
-          <div className="text-md py-2 px-3" style={{ color: 'var(--color-text-muted)' }}>
-            Fetching Chats...
-          </div>
-        ) : !loading && (!Array.isArray(listOfChats) || listOfChats?.length <= 0) ? (
-          <div className="text-md py-2 px-3" style={{ color: 'var(--color-text-muted)' }}>
-            Start a new conversation
-          </div>
-        ) : (
-          Array.isArray(listOfChats) && listOfChats?.map((chat) => (
-            <div
-              onClick={() => handleClick(chat.id)}
-              key={chat.id}
-              className={`group flex items-center justify-between text-md py-2 px-3 rounded cursor-pointer transition-colors duration-200 ${
-                sessionID === chat.id ? "" : "hover:bg-[var(--color-input-bg)]"
-              } ${
-                sessionID === chat.id ? "bg-[var(--color-input-bg)]" : ""
-              } ${
-                loadingChatId === chat.id ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              style={{ color: 'var(--color-text)' }}
+      {/* New Chat - Only show if hideChats is false */}
+      {!hideChats && (
+        <>
+          <div className="flex justify-end">
+            <button
+              onClick={handleNewChat}
+              disabled={loadingChatId === "new"}
+              className="flex items-center space-x-3 w-full px-4 py-2 rounded-lg text-lg font-medium transition disabled:opacity-50"
+              style={{
+                background: 'var(--color-input-bg)',
+                color: 'var(--color-primary)',
+              }}
             >
-              {editingChatId === chat.id ? (
-                <div
-                  className="flex items-center justify-between w-full"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <input
-                    ref={editInputRef}
-                    type="text"
-                    value={editingChatName}
-                    onChange={(e) => setEditingChatName(e.target.value)}
-                    onKeyDown={(e) => handleEditKeyDown(e, chat.id)}
-                    className="w-full py-1 px-2 rounded outline-none transition-colors duration-200"
-                    style={{ background: 'var(--color-input-bg)', color: 'var(--color-text)' }}
-                    autoFocus
-                  />
-                  <button
-                    onClick={(e) => handleSaveEditedChat(e, chat.id)}
-                    className="ml-2 p-1 rounded-full transition-colors duration-200"
-                    style={{ background: 'var(--color-card-bg)' }}
-                  >
-                    <Check size={16} style={{ color: 'var(--color-primary)' }} />
-                  </button>
-                </div>
+              {loadingChatId === "new" ? (
+                <div className="w-4 h-4 border-2 border-[var(--color-border)] border-t-[var(--color-primary)] rounded-full animate-spin" />
               ) : (
-                <>
-                  <div className="truncate flex-1 flex items-center">
-                    {chat.title}
-                    {loadingChatId === chat.id && (
-                      <div className="ml-2 w-3 h-3 border border-[var(--color-border)] border-t-[var(--color-primary)] rounded-full animate-spin" />
-                    )}
-                  </div>
-                  {sessionID === chat.id && loadingChatId !== chat.id && (
-                    <button
-                      onClick={(e) => handleEditChat(e, chat.id, chat.title)}
-                      className="ml-2 p-1 opacity-0 group-hover:opacity-100 rounded-full transition-colors duration-200"
-                      style={{ background: 'var(--color-card-bg)' }}
-                    >
-                      <Edit2 size={14} style={{ color: 'var(--color-primary)' }} />
-                    </button>
-                  )}
-                </>
+                <MessageCirclePlus size={15} />
               )}
-            </div>
-          ))
-        )}
-      </div>
+              <span className="text-sm">
+                {loadingChatId === "new" ? "Creating..." : "New Chat"}
+              </span>
+            </button>
+          </div>
+
+          {/* Search Button */}
+          <div className="my-4 relative">
+            <SearchButton onClick={() => setIsSearchModalOpen(true)} />
+          </div>
+
+          {/* Search Modal */}
+          <ChatHistoryModal
+            isOpen={isSearchModalOpen}
+            onClose={() => setIsSearchModalOpen(false)}
+          />
+
+          {/* Chats List */}
+          <div className="flex flex-col overflow-y-auto space-y-1 scrollbar-hide mt-0 mb-2">
+            {loading && (!Array.isArray(listOfChats) || listOfChats?.length === 0) ? (
+              <div className="text-md py-2 px-3" style={{ color: 'var(--color-text-muted)' }}>
+                Fetching Chats...
+              </div>
+            ) : !loading && (!Array.isArray(listOfChats) || listOfChats?.length <= 0) ? (
+              <div className="text-md py-2 px-3" style={{ color: 'var(--color-text-muted)' }}>
+                Start a new conversation
+              </div>
+            ) : (
+              Array.isArray(listOfChats) && listOfChats?.map((chat) => (
+                <div
+                  onClick={() => handleClick(chat.id)}
+                  key={chat.id}
+                  className={`group flex items-center justify-between text-md py-2 px-3 rounded cursor-pointer transition-colors duration-200 ${
+                    sessionID === chat.id ? "" : "hover:bg-[var(--color-input-bg)]"
+                  } ${
+                    sessionID === chat.id ? "bg-[var(--color-input-bg)]" : ""
+                  } ${
+                    loadingChatId === chat.id ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  style={{ color: 'var(--color-text)' }}
+                >
+                  {editingChatId === chat.id ? (
+                    <div
+                      className="flex items-center justify-between w-full"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <input
+                        ref={editInputRef}
+                        type="text"
+                        value={editingChatName}
+                        onChange={(e) => setEditingChatName(e.target.value)}
+                        onKeyDown={(e) => handleEditKeyDown(e, chat.id)}
+                        className="w-full py-1 px-2 rounded outline-none transition-colors duration-200"
+                        style={{ background: 'var(--color-input-bg)', color: 'var(--color-text)' }}
+                        autoFocus
+                      />
+                      <button
+                        onClick={(e) => handleSaveEditedChat(e, chat.id)}
+                        className="ml-2 p-1 rounded-full transition-colors duration-200"
+                        style={{ background: 'var(--color-card-bg)' }}
+                      >
+                        <Check size={16} style={{ color: 'var(--color-primary)' }} />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="truncate flex-1 flex items-center">
+                        {chat.title}
+                        {loadingChatId === chat.id && (
+                          <div className="ml-2 w-3 h-3 border border-[var(--color-border)] border-t-[var(--color-primary)] rounded-full animate-spin" />
+                        )}
+                      </div>
+                      {sessionID === chat.id && loadingChatId !== chat.id && (
+                        <button
+                          onClick={(e) => handleEditChat(e, chat.id, chat.title)}
+                          className="ml-2 p-1 opacity-0 group-hover:opacity-100 rounded-full transition-colors duration-200"
+                          style={{ background: 'var(--color-card-bg)' }}
+                        >
+                          <Edit2 size={14} style={{ color: 'var(--color-primary)' }} />
+                        </button>
+                      )}
+                    </>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </>
+      )}
 
       <div className="my-2" style={{ borderTop: '1px solid var(--color-border)' }} />
 

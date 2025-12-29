@@ -1,0 +1,10 @@
+[
+    {
+        "role": "user",
+        "prompt": "my name is Abdullah"
+    },
+    {
+        "role": "ai",
+        "prompt": "Hello Abdullah, how can I assist you today?"
+    }
+]

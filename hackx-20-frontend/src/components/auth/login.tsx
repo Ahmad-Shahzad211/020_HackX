@@ -26,11 +26,13 @@ const LoginSchema = Yup.object().shape({
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [runtimeMessage, setRuntimeMessage] = useState("");
+  const [isAdminLogin, setIsAdminLogin] = useState(false);
 
   const route = useRouter();
   const searchParams = useSearchParams();
 
   const setUserName = useUserStore((state) => state.setUserName);
+  const setUserRole = useUserStore((state) => state.setUserRole);
   const setEmail = legisStore((state) => state.setEmail);
 
   /* ----------------------------
@@ -114,12 +116,24 @@ const LoginPage = () => {
                 values.city = locationInfo.city;
                 values.country = locationInfo.country;
 
-                const resp = await loginHandler(values);
+                const resp = await loginHandler({ ...values, isAdminLogin });
 
                 if (resp.status === 200) {
+                  console.log("Login response:", resp.data);
+                  console.log("User role from API:", resp.data.role);
                   setUserName(resp.data.fullName);
+                  if (setUserRole) {
+                    setUserRole(resp.data.role || "user");
+                    console.log("Role set to:", resp.data.role || "user");
+                  }
                   setRuntimeMessage(resp.data.message);
-                  route.push("/cl/chatscreen");
+                  
+                  // Redirect based on user role
+                  if (resp.data.role === "admin") {
+                    route.push("/cl/admin-dashboard");
+                  } else {
+                    route.push("/cl/chatscreen");
+                  }
                   return;
                 }
 
@@ -196,6 +210,15 @@ const LoginPage = () => {
                       className="mr-2"
                     />
                     Remember me
+                  </label>
+                  <label className="flex items-center" style={{ color: 'var(--color-text)' }}>
+                    <input
+                      type="checkbox"
+                      checked={isAdminLogin}
+                      onChange={(e) => setIsAdminLogin(e.target.checked)}
+                      className="mr-2"
+                    />
+                    Login as Admin
                   </label>
                   <Link
                     href="/auth/forgot-password"
