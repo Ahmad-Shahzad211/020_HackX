@@ -522,30 +522,7 @@ const SignupPage = () => {
                         className="w-7 h-7"
                       />
                     </button>
-                    <button
-                      type="button"
-                      onClick={handleFacebookSignup}
-                    >
-                      <Image
-                        width={200}
-                        height={200}
-                        src="/images/Auth/facebook.svg"
-                        alt="Facebook"
-                        className="w-7 h-7"
-                      />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleAppleSignup}
-                    >
-                      <Image
-                        width={200}
-                        height={200}
-                        src="/images/Auth/apple.svg"
-                        alt="Apple"
-                        className="w-7 h-7"
-                      />
-                    </button>
+                    
                   </div>
 
                   {/* Redirect to Login */}

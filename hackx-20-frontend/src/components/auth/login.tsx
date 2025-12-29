@@ -260,27 +260,7 @@ const LoginPage = () => {
                       className="w-7 h-7 object-contain"
                     />
                   </button>
-                  <button
-                    type="button"
-                    onClick={handleFacebookLogin}
-                  >
-                    <Image
-                      width={200}
-                      height={200}
-                      src="/images/Auth/facebook.svg"
-                      alt="Facebook"
-                      className="w-7 h-7"
-                    />
-                  </button>
-                  <button type="button" onClick={handleAppleLogin}>
-                    <Image
-                      width={200}
-                      height={200}
-                      src="/images/Auth/apple.svg"
-                      alt="Apple"
-                      className="w-7 h-7"
-                    />
-                  </button>
+                 
                 </div>
                 <p className="text-center text-xs sm:text-sm mt-4" style={{ color: 'var(--color-text-muted)' }}>
                   Don&apos;t have an account?
